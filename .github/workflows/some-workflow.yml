@@ -1,8 +1,8 @@
 name: Some workflow
 
 on:
-  push:
   workflow_dispatch:
+  push:
 
 check-bats-version:
   runs-on: ubuntu-latest
