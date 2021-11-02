@@ -8,9 +8,10 @@ jobs:
   on_comment:
     name: Trigger PR comment
     if: >
+      github.event.issue.pull_request &&
       startsWith(github.event.comment.body, 'bot run') &&
       (
-        contains(github.event.comment.body, 'test1')
+        contains(github.event.comment.body, 'test1') ||
         contains(github.event.comment.body, 'test2')
       )
 
