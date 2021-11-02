@@ -1,0 +1,43 @@
+name: Test comment
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  on_comment:
+    name: Trigger PR comment
+    if: >
+      startsWith(github.event.comment.body, 'bot run') &&
+      (
+        contains(github.event.comment.body, 'test1')
+        contains(github.event.comment.body, 'test2')
+      )
+
+    runs-on: ubuntu-latest
+    steps:
+      - id: prData
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const { data: pr } = await github.pulls.get({ owner, repo, pull_number: number });
+            core.setOutput('ref', pr.head.ref)
+
+      - name:
+        if: ${{ contains(github.event.comment.body, 'test1') }}
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Some workflow
+          ref: ${{ steps.prData.outputs.ref }}
+
+      - name: React to comment - success or failure
+        if: ${{ always() }}
+        env:
+          JOB_STATUS: ${{ job.status }}
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+            await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
