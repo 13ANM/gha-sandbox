@@ -30,6 +30,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Some workflow
+          token: ${{ secrets.PERSONAL_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
 
       - name: React to comment - success or failure
