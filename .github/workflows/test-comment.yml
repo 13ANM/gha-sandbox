@@ -3,6 +3,7 @@ name: Test comment
 on:
   issue_comment:
     types: [created, edited]
+  workflow_dispatch:
 
 jobs:
   on_comment:
@@ -29,7 +30,7 @@ jobs:
         if: ${{ contains(github.event.comment.body, 'test1') }}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
-          workflow: Some workflow
+          workflow: Test comment
           token: ${{ secrets.PERSONAL_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
 
@@ -43,3 +44,13 @@ jobs:
             const { owner, repo } = context.issue;
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
             await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats -v
