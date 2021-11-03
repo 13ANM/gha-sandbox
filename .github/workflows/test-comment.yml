@@ -1,8 +1,17 @@
 name: Test comment
 
 on:
+  workflow_dispatch:
+    inputs:
+      someInput:
+        description: 'Description'
+        required: true
+        default: 'Default'
   issue_comment:
     types: [created, edited]
+  push:
+    branches:
+      - branch-4
 
 jobs:
   on_comment:
@@ -29,7 +38,7 @@ jobs:
         if: ${{ contains(github.event.comment.body, 'test1') }}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
-          workflow: Some workflow
+          workflow: Test comment
           token: ${{ secrets.PERSONAL_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
 
