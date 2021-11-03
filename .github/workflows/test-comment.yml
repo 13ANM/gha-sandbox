@@ -35,7 +35,7 @@ jobs:
             core.setOutput('ref', pr.head.ref)
 
       - name:
-        if: ${{ contains(github.event.comment.body, 'test1') }}
+        if: ${{ contains(github.event.comment.body, 'test1') || contains(github.event.comment.body, 'test2') }}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Test comment
@@ -53,9 +53,18 @@ jobs:
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
             await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
 
-  echo_input:
-    name: Echo input
+  echo_one:
+    name: Echo test1
+    if: ${{ contains(github.event.comment.body, 'test1' )}}
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo '${{ github.event.inputs.someInput }}!'
+          echo 'Test 1'
+
+  echo_two:
+    name: Echo test2
+    if: ${{ contains(github.event.comment.body, 'test2' )}}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo 'Test 2'
