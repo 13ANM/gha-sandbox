@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       someInput:
-        description: 'Description'
+        description: ${{ github.event.comment.body === 'test1' && 'Description' }}
         required: true
         default: 'Default'
   issue_comment:
@@ -53,13 +53,9 @@ jobs:
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
             await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
 
-  check-bats-version:
-    name: Check BATS version
+  echo_input:
+    name: Echo input
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+      - run: |
+          echo '${{ github.event.inputs.someInput }}!'
