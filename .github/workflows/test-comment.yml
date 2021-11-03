@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       someInput:
-        description: ${{ github.event.comment.body === 'test1' && 'Description' }}
+        description: ${{ contains(github.event.comment.body, 'test1') && 'Description' }}
         required: true
         default: 'Default'
   issue_comment:
