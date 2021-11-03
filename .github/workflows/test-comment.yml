@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   issue_comment:
     types: [created, edited]
-  push:
-    branches:
-      - branch-4
 
 jobs:
   on_comment:
@@ -29,13 +26,27 @@ jobs:
             const { data: pr } = await github.pulls.get({ owner, repo, pull_number: number });
             core.setOutput('ref', pr.head.ref)
 
-      - name:
+      - name: Some test
         if: ${{ contains(github.event.comment.body, 'test1') || contains(github.event.comment.body, 'test2') }}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Test comment
           token: ${{ secrets.PERSONAL_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
+
+      - name: Echo one
+          if: ${{ contains(github.event.comment.body, 'test1' )}}
+          runs-on: ubuntu-latest
+          steps:
+            - run: |
+                echo 'Test 1'
+
+      - name: Echo two
+          if: ${{ contains(github.event.comment.body, 'test2' )}}
+          runs-on: ubuntu-latest
+          steps:
+            - run: |
+                echo 'Test 2'
 
       - name: React to comment - success or failure
         if: ${{ always() }}
@@ -47,19 +58,3 @@ jobs:
             const { owner, repo } = context.issue;
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
             await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
-
-  echo_one:
-    name: Echo test1
-    if: ${{ contains(github.event.comment.body, 'test1' )}}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo 'Test 1'
-
-  echo_two:
-    name: Echo test2
-    if: ${{ contains(github.event.comment.body, 'test2' )}}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo 'Test 2'
