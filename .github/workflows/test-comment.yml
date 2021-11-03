@@ -2,11 +2,6 @@ name: Test comment
 
 on:
   workflow_dispatch:
-    inputs:
-      someInput:
-        description: ${{ contains(github.event.comment.body, 'test1') && 'Description' }}
-        required: true
-        default: 'Default'
   issue_comment:
     types: [created, edited]
   push:
