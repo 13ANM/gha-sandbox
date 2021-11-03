@@ -45,6 +45,7 @@ jobs:
             await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
 
   check-bats-version:
+    name: Check BATS version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
