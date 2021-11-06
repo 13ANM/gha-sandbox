@@ -76,9 +76,9 @@ jobs:
           echo '${{ needs.setup.outputs.matrixInstances }}'
 
   complete:
-    name: Update Cypress check status
+    name: Update status
     runs-on: ubuntu-latest
-    needs: cypress_test_worker
+    needs: runInstances
     if: always()
     steps:
       - name: Set status check - success / failure / error
