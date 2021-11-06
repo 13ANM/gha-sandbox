@@ -71,6 +71,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup node
+        with:
+          node-version: ${{ matrix.node }}
+
       - name: Echo Matrix Instances
         run: |
           echo '${{ needs.setup.outputs.matrixInstances }}'

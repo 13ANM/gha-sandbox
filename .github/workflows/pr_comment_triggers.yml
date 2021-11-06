@@ -39,7 +39,7 @@ jobs:
           workflow: Comments Trigger
           token: ${{ secrets.PERSONAL_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
-          inputs: '{ "testInput": "firstInstance" }'
+          inputs: '{ "testInput": "14" }'
 
       - name: Trigger second workflow
         if: ${{ contains(github.event.comment.body, 'both') || contains(github.event.comment.body, 'second') }}
@@ -48,7 +48,7 @@ jobs:
           workflow: Comments Trigger
           token: ${{ secrets.PERSONAL_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
-          inputs: '{ "testInput": "secondInstance" }'
+          inputs: '{ "testInput": "16" }'
 
       - name: React to comments - Success or Failure
         if: ${{ always() }}
